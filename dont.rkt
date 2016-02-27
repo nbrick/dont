@@ -1,6 +1,13 @@
 #lang racket/base
 
-(define (h1 content)
-  (string-append "<h1>" content "</h1>"))
+(define (dob->str dobtype content)
+  (string-append "<" dobtype ">" (apply string-append content) "</" dobtype ">"))
 
-(display (string-append (h1 "hello") "\n"))
+(display
+  (string-append
+    (dob->str
+      "html"
+      (list
+        (dob->str "head" (list (dob->str "title" (list "hello"))))
+        (dob->str "body" (list (dob->str "h1" (list "my webpage"))))))
+    "\n"))
