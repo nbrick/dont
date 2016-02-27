@@ -1,13 +1,18 @@
 #lang racket/base
 
-(define (dob->str dobtype content)
-  (string-append "<" dobtype ">" (apply string-append content) "</" dobtype ">"))
+(struct dob (type content))  ; content is a list of dobs and/or strings.
+
+(define (dob->str dob)
+  (if (string? dob)
+    dob
+    (let* ([tag (dob-type dob)]
+           [content (dob-content dob)])
+      (string-append "<" tag ">" (apply string-append (map dob->str content)) "</" tag ">"))))
 
 (display
   (string-append
     (dob->str
-      "html"
-      (list
-        (dob->str "head" (list (dob->str "title" (list "hello"))))
-        (dob->str "body" (list (dob->str "h1" (list "my webpage"))))))
+      (dob "html" (list
+                    (dob "head" (list (dob "title" (list "hello"))))
+                    (dob "body" (list (dob "h1" (list "my webpage")))))))
     "\n"))
