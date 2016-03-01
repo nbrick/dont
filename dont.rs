@@ -23,14 +23,33 @@ impl fmt::Display for Element {
 }
 
 fn main() {
-    let head = Element::Dob {
-        tag: String::from("head"),
-        contents: vec![Element::Plain(String::from("wassup"))],
-    };
-
     let html = Element::Dob {
         tag: String::from("html"),
-        contents: vec![head, Element::Plain(String::from("hello!"))],
+        contents: vec![
+            Element::Dob {
+                tag: String::from("head"),
+                contents: vec![
+                    Element::Dob {
+                        tag: String::from("title"),
+                        contents: vec![
+                            Element::Plain(String::from("hello")),
+                        ],
+                    },
+                ],
+            },
+            Element::Dob {
+                tag: String::from("body"),
+                contents: vec![
+                    Element::Dob {
+                        tag: String::from("h1"),
+                        contents: vec![
+                            Element::Plain(String::from("my heading")),
+                        ],
+                    },
+                    Element::Plain(String::from("some body text")),
+                ],
+            },
+        ],
     };
 
     println!("{}", html);
