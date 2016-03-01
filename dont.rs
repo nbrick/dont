@@ -10,13 +10,13 @@ enum Element {
 impl fmt::Display for Element {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Element::Plain(ref s) => write!(f, "{}", s),
-            Element::Dob {tag: ref t, contents: ref c} => {
-                try!(write!(f, "<{}>", t));
-                for elem in c {
-                    try!(write!(f, "{}", elem));
+            Element::Plain(ref string) => write!(f, "{}", string),
+            Element::Dob { ref tag, ref contents } => {
+                try!(write!(f, "<{}>", tag));
+                for element in contents {
+                    try!(write!(f, "{}", element));
                 }
-                write!(f, "</{}>", t)
+                write!(f, "</{}>", tag)
             },
         }
     }
