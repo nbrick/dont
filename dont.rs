@@ -1,10 +1,10 @@
 use std::string::String;
-use std::collections::LinkedList;
+use std::vec::Vec;
 use std::fmt;
 
 enum Element {
     Plain(String),
-    Dob { tag: String, contents: LinkedList<Element> },
+    Dob { tag: String, contents: Vec<Element> },
 }
 
 impl fmt::Display for Element {
@@ -17,36 +17,21 @@ impl fmt::Display for Element {
                     write!(f, "{}", elem);
                 }
                 write!(f, "</{}>", t)
-            }
+            },
         }
     }
 }
 
 fn main() {
-    let mut html = Element::Dob {
-        tag: String::from("html"),
-        contents: LinkedList::new(),
-    };
-    
     let mut head = Element::Dob {
         tag: String::from("head"),
-        contents: LinkedList::new(),
+        contents: vec![Element::Plain(String::from("wassup"))],
     };
-    
-    match head {
-        Element::Dob {tag: ref t, contents: ref mut c} => {
-            c.push_back(Element::Plain(String::from("wassup")))
-        }
-        Element::Plain(_) => {}
-    }
-    
-    match html {
-        Element::Dob {tag: ref t, contents: ref mut c} => {
-            c.push_back(head);
-            c.push_back(Element::Plain(String::from("hello!")))
-        }
-        Element::Plain(_) => {}
-    }
+
+    let mut html = Element::Dob {
+        tag: String::from("html"),
+        contents: vec![head, Element::Plain(String::from("hello!"))],
+    };
 
     println!("{}", html);
 }
