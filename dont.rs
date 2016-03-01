@@ -12,9 +12,9 @@ impl fmt::Display for Element {
         match *self {
             Element::Plain(ref s) => write!(f, "{}", s),
             Element::Dob {tag: ref t, contents: ref c} => {
-                write!(f, "<{}>", t);
+                try!(write!(f, "<{}>", t));
                 for elem in c {
-                    write!(f, "{}", elem);
+                    try!(write!(f, "{}", elem));
                 }
                 write!(f, "</{}>", t)
             },
@@ -23,12 +23,12 @@ impl fmt::Display for Element {
 }
 
 fn main() {
-    let mut head = Element::Dob {
+    let head = Element::Dob {
         tag: String::from("head"),
         contents: vec![Element::Plain(String::from("wassup"))],
     };
 
-    let mut html = Element::Dob {
+    let html = Element::Dob {
         tag: String::from("html"),
         contents: vec![head, Element::Plain(String::from("hello!"))],
     };
