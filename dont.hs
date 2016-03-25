@@ -1,38 +1,48 @@
-data Node = P String
-          | E String [Node]
+data Node
+  = P String
+  | E String [(String, String)] [Node]
 
 instance Show Node where
-    show (P string) = string
-    show (E tag nodes) =    "<" ++ tag ++ ">"
-                         ++ (foldl (++) "" (map show nodes))
-                         ++ "</" ++ tag ++ ">"
+  show (P string) = string
+  show (E tag attributes nodes) =
+    let
+      showAttribute (key, val) = " " ++ key ++ "='" ++ val ++ "'"
+    in
+         "<" ++ tag ++ (foldl (++) "" (map showAttribute attributes)) ++ ">"
+      ++ (foldl (++) "" (map show nodes))
+      ++ "</" ++ tag ++ ">"
 
 
 -- Containers
-html = E "html"
-head_ = E "head"
-body = E "body"
+html = E "html" []
+head_ = E "head" []
+body = E "body" []
+p = E "p" []
 
 -- Simple elements
-title text = E "title" [ P text ]
-h1 text = E "h1" [ P text ]
-p text = E "p" [ P text ]
+h1 = E "h1" []
+title text = E "title" [] $ just text
+link href text = E "a" [ ("href", href) ] $ just text
 
-nothing = P ""
+-- Sugar
+just text = [ P text ]
+text = P
+blank = P ""
 
 
 document authenticated =
   html
 
-  [ head_
-    [ title "Nic's webpage" ]
+    [ head_
+        [ title "Nic's webpage" ]
 
-  , body
-    [ h1 "Hello!"
-    , p "What's up?"
-    , if authenticated then p "Private stuff" else nothing
+    , body
+        [ h1 $ just "Hello!"
+        , p $ just "What's up?"
+        , if authenticated then p $ just "Private stuff" else blank
+        , p [ text "This is ", link "http://example.org" "a link", text "." ]
+        ]
+
     ]
-
-  ]
 
 main = putStrLn $ show (document False)
