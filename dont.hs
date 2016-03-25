@@ -8,13 +8,23 @@ instance Show Node where
                          ++ "</" ++ tag ++ ">"
 
 html = E "html"
-                [ E "head"
-                           [ E "title" [ P "Nic's webpage" ] ]
+head_ = E "head"
+title = E "title"
+body = E "body"
+h1 = E "h1"
+p = E "p"
 
-                , E "body"
-                           [ E "h1" [ P "Hello!" ]
-                           , P "What's up?"
-                           ]
-                ]
+document =
+  html
 
-main = putStrLn $ show html
+  [ head_
+    [ title [ P "Nic's webpage" ] ]
+
+  , body
+    [ h1 [ P "Hello!" ]
+    , p [ P "What's up?" ]
+    ]
+
+  ]
+
+main = putStrLn $ show document
