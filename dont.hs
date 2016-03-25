@@ -19,15 +19,17 @@ head_ = E "head" []
 body = E "body" []
 p = E "p" []
 
--- Simple elements
-h1 = E "h1" []
-title text = E "title" [] $ just text
-link href text = E "a" [ ("href", href) ] $ just text
-
 -- Sugar
-just text = [ P text ]
 text = P
 blank = P ""
+
+-- Simple elements
+h1 = E "h1" []
+h2 = E "h2" []
+
+-- Sugary simple elements
+title t = E "title" [] [ text t ]
+link href t = E "a" [ ("href", href) ] [ text t ]
 
 
 document authenticated =
@@ -37,10 +39,11 @@ document authenticated =
         [ title "Nic's webpage" ]
 
     , body
-        [ h1 $ just "Hello!"
-        , p $ just "What's up?"
-        , if authenticated then p $ just "Private stuff" else blank
+        [ h1 [ text "Hello!" ]
+        , p [ text "What's up?" ]
+        , if authenticated then p [ text "Private stuff" ] else blank
         , p [ text "This is ", link "http://example.org" "a link", text "." ]
+        , h2 [ link "#" "An anchor link" ]
         ]
 
     ]
