@@ -7,24 +7,32 @@ instance Show Node where
                          ++ (foldl (++) "" (map show nodes))
                          ++ "</" ++ tag ++ ">"
 
+
+-- Containers
 html = E "html"
 head_ = E "head"
-title = E "title"
 body = E "body"
-h1 = E "h1"
-p = E "p"
 
-document =
+-- Simple elements
+title text = E "title" [ P text ]
+h1 text = E "h1" [ P text ]
+p text = E "p" [ P text ]
+
+nothing = P ""
+
+
+document authenticated =
   html
 
   [ head_
-    [ title [ P "Nic's webpage" ] ]
+    [ title "Nic's webpage" ]
 
   , body
-    [ h1 [ P "Hello!" ]
-    , p [ P "What's up?" ]
+    [ h1 "Hello!"
+    , p "What's up?"
+    , if authenticated then p "Private stuff" else nothing
     ]
 
   ]
 
-main = putStrLn $ show document
+main = putStrLn $ show (document False)
